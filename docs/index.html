@@ -1,1 +1,227 @@
-TODO
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>PhaseInv WSSD</title>
+        <meta charset="UTF-8">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <body>
+        <header>
+            <div id="title_authors" class="titlecenter">
+                <h1>Is Phase Really Needed for Weakly-Supervised Dereverberation ?</h1>
+            </div>
+            <div class="center">
+                <p style="text-align:center;">
+                    <b>Marius Rodrigues, Louis Bahrman, Roland Badeau, Gaël Richard</b>
+                </p>
+                <p style="text-align:center;">
+                    <i>LTCI, Télécom Paris, Institut Polytechnique de Paris, France</i>
+                </p>
+                <p style="text-align:center;">Submitted to ICASSP 2026</p>
+                <hr>
+            </div>
+            <div class="center", style="max-width:600px;">
+                <div class="container">
+                    <!--<a href="https://github.com/mariusrod/PhaseInv-WSSD">Paper</a> &nbsp;-->
+                    <!--<a href="https://github.com/mariusrod/PhaseInv-WSSD">Arxiv</a> &nbsp;-->
+                    <!--<a href="https://github.com/mariusrod/PhaseInv-WSSD">HAL</a> &nbsp;-->
+                    <!--<a href="https://github.com/mariusrod/PhaseInv-WSSD">Detailed proofs</a> &nbsp;-->
+                    <a href="https://github.com/mariusrod/PhaseInv-WSSD">Code</a>
+                </div>
+            </div>
+        </header>
+        <div class="center">
+            <hr>
+            <figure>
+                <img class="figure" src="convergence.svg" alt="Distribution of the Fourier coefficients of a synthetic RIR in the complex plane.">
+                <p class="caption">Distribution of synthetic Room Impulse Response's Fourier coefficients in the complex plane, at several frequencies.</p>
+            </figure>
+            <section>
+                <h2>Abstract</h2>
+                <p>
+                    In unsupervised or weakly-supervised approaches for speech dereverberation, the target clean (dry) signals
+                    are considered to be unknown during training. In that context, evaluating to what extent information can be
+                    retrieved from the sole knowledge of reverberant (wet) speech becomes critical. 
+                    This work investigates the role of the reverberant (wet) phase in the time–frequency domain. 
+                    Based on Statistical Wave Field Theory, we show that late reverberation perturbs phase components with white, 
+                    uniformly distributed noise, except at low frequencies.
+                    Consequently, the wet phase carries limited useful information and is not essential for weakly supervised dereverberation. 
+                    To validate this finding, we train dereverberation models under a recent weak supervision framework and demonstrate that 
+                    performance can be significantly improved by excluding the reverberant phase from the loss function.
+                </p>
+            </section>
+            <section>
+                <h2>Audio Examples</h2>
+                <p>
+                    Below are some audio examples comparing the dereverberation performance of various models.
+                    The models are trained under a weakly-supervised framework, with different configurations:
+                    either using or not using the reverberant phase in the loss function, and either using or not using
+                    logarithmic compression of the magnitude spectrograms. PI-FSN is a variant of FSN that only estimates
+                    the magnitude spectrogram, and uses the reverberant phase for reconstruction.
+                    You can listen to the wet input, the ground truth dry signal, and the outputs of the different models
+                    for three different reverberation times (RT60). Headphones are recommended for a better experience. Input wet signals come from the <i>EARS-Reverb</i> dataset.
+                </p>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td></td>
+                            <td>Wet input</td>
+                            <td>Ground truth</td>
+                            <td>FSN </td>
+                            <td>FSN </td>
+                            <td>FSN </td>
+                            <td>FSN </td>
+                            <td>PI-FSN </td>
+                        </tr>
+                        <tr>
+                            <td> Phase-inv. ?</td>
+                            <td></td>
+                            <td></td>
+                            <td>&#x2717;</td>
+                            <td>&#x2717;</td>
+                            <td>&#x2713;</td>
+                            <td>&#x2713;</td>
+                            <td>&#x2713;</td>
+                        </tr>
+                        <tr>
+                            <td> log-comp. ?</td>
+                            <td></td>
+                            <td></td>
+                            <td>&#x2717;</td>
+                            <td>&#x2713;</td>
+                            <td>&#x2717;</td>
+                            <td>&#x2713;</td>
+                            <td>&#x2713;</td>
+                        </tr>
+                        <tr>
+                            <td> RT60=0.32s</td>
+                            <td>
+                                <audio controls="">
+                                    <source src="audios/input_0.32.ogg" type="audio/ogg">
+                                </audio>
+                            </td>
+                            <td>
+                                <audio controls="">
+                                    <source src="audios/target_0.32.ogg" type="audio/ogg">
+                                </audio>
+                            </td>
+                            <td>
+                                <audio controls="">
+                                    <source src="audios/FSN_phasedep_nocomp_0.32.ogg" type="audio/ogg">
+                                </audio>
+                            </td>
+                            <td>
+                                <audio controls="">
+                                    <source src="audios/FSN_phasedep_comp_0.32.ogg" type="audio/ogg">
+                                </audio>
+                            </td>
+                            <td>
+                                <audio controls="">
+                                    <source src="audios/FSN_phaseinv_nocomp_0.32.ogg" type="audio/ogg">
+                                </audio>
+                            </td>
+                            <td>
+                                <audio controls="">
+                                    <source src="audios/FSN_phaseinv_comp_0.32.ogg" type="audio/ogg">
+                                </audio>
+                            </td>
+                            <td>
+                                <audio controls="">
+                                    <source src="audios/PhaseInvFSN_phaseinv_comp_0.32.ogg" type="audio/ogg">
+                                </audio>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td> RT60=0.54s </td>
+                            <td>
+                                <audio controls="">
+                                    <source src="audios/input_0.54.ogg" type="audio/ogg">
+                                </audio>
+                            </td>
+                            <td>
+                                <audio controls="">
+                                    <source src="audios/target_0.54.ogg" type="audio/ogg">
+                                </audio>
+                            </td>
+                            <td>
+                                <audio controls="">
+                                    <source src="audios/FSN_phasedep_nocomp_0.54.ogg" type="audio/ogg">
+                                </audio>
+                            </td>
+                            <td>
+                                <audio controls="">
+                                    <source src="audios/FSN_phasedep_comp_0.54.ogg" type="audio/ogg">
+                                </audio>
+                            </td>
+                            <td>
+                                <audio controls="">
+                                    <source src="audios/FSN_phaseinv_nocomp_0.54.ogg" type="audio/ogg">
+                                </audio>
+                            </td>
+                            <td>
+                                <audio controls="">
+                                    <source src="audios/FSN_phaseinv_comp_0.54.ogg" type="audio/ogg">
+                                </audio>
+                            </td>
+                            <td>
+                                <audio controls="">
+                                    <source src="audios/PhaseInvFSN_phaseinv_comp_0.54.ogg" type="audio/ogg">
+                                </audio>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td> RT60=0.90s </td>
+                            <td>
+                                <audio controls="">
+                                    <source src="audios/input_0.90.ogg" type="audio/ogg">
+                                </audio>
+                            </td>
+                            <td>
+                                <audio controls="">
+                                    <source src="audios/target_0.90.ogg" type="audio/ogg">
+                                </audio>
+                            </td>
+                            <td>
+                                <audio controls="">
+                                    <source src="audios/FSN_phasedep_nocomp_0.90.ogg" type="audio/ogg">
+                                </audio>
+                            </td>
+                            <td>
+                                <audio controls="">
+                                    <source src="audios/FSN_phasedep_comp_0.90.ogg" type="audio/ogg">
+                                </audio>
+                            </td>
+                            <td>
+                                <audio controls="">
+                                    <source src="audios/FSN_phaseinv_nocomp_0.90.ogg" type="audio/ogg">
+                                </audio>
+                            </td>
+                            <td>
+                                <audio controls="">
+                                    <source src="audios/FSN_phaseinv_comp_0.90.ogg" type="audio/ogg">
+                                </audio>
+                            </td>
+                            <td>
+                                <audio controls="">
+                                    <source src="audios/PhaseInvFSN_phaseinv_comp_0.90.ogg" type="audio/ogg">
+                                </audio>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+            <section>
+                <h2>Citation</h2>
+                <p>
+                    If you find this work useful, please cite it using the following BibTeX entry:
+                </p>
+                <pre>
+                    Coming soon
+                </pre>
+            </section>
+        </div>
+    </body>
+</html>
