@@ -59,8 +59,8 @@
                     Below are some audio examples comparing the dereverberation performance of various models.
                     The models are trained under a weakly-supervised framework, with different configurations:
                     either using or not using the reverberant phase in the loss function, and either using or not using
-                    logarithmic compression of the magnitude spectrograms. PI-FSN is a variant of FSN that only estimates
-                    the magnitude spectrogram, and uses the reverberant phase for reconstruction.
+                    logarithmic compression of the magnitude spectrograms. Regardless of the loss configuration, FSN estimates the complex STFT of the dry. PI-FSN is a variant of FSN that only estimates
+                    the magnitude spectrogram and uses the reverberant phase for reconstruction.
                     You can listen to the wet input, the ground truth dry signal, and the outputs of the different models
                     for three different reverberation times (RT60). Headphones are recommended for a better experience. Input wet signals come from the <i>EARS-Reverb</i> dataset.
                 </p>
